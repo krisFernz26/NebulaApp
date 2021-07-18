@@ -48,7 +48,7 @@ const Register = () => {
 				password: passwordRef.current.value,
 				name: nameRef.current.value,
 			});
-			history.push("/home");
+			history.push("/");
 		} catch {
 			setError("Failed to create an account");
 		}
@@ -59,7 +59,7 @@ const Register = () => {
 		<>
 			<header>
 				<FaWindowClose
-					onClick={() => history.push("/")}
+					onClick={() => history.push("/landing")}
 					size={32}
 					className="close-button"
 				/>

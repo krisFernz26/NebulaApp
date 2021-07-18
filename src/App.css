@@ -36,10 +36,26 @@ a:hover {
 	align-items: center;
 	justify-content: center;
 }
+.navbar .container {
+	height: auto;
+}
+.navbar-brand {
+	font-weight: 600;
+	font-size: 1.6rem;
+	transition: all 100ms;
+}
+.navbar-brand :hover {
+	color: rgba(255, 255, 255, 0.7);
+}
 .navbar-toggler-icon {
 	color: var(--secondary-color);
+	border: 1px solid var(--secondary-color);
+	background-color: var(--secondary-color);
+	border-radius: 5px;
 }
-
+/* #home-text {
+	height: 30vh;
+} */
 .close-button {
 	color: rgba(255, 255, 255, 0.726);
 	cursor: pointer;
@@ -70,6 +86,17 @@ a:hover {
 	background-color: var(--secondary-color);
 	color: var(--main-bg-color);
 	box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.473);
+}
+.profile-link {
+	height: 2.5rem;
+	width: 2.5rem;
+	background-color: var(--secondary-color);
+	border-radius: 100%;
+	transition: all 100ms;
+}
+.profile-link:hover {
+	background-color: rgba(255, 255, 255, 0.651);
+	box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.473);
 }
 input[type="file"] {
 	display: none;
@@ -104,4 +131,10 @@ input[type="password"]:focus {
 	border: 1px solid var(--secondary-color);
 	object-fit: cover;
 	opacity: 0.8;
+}
+
+.systems-grid .col {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

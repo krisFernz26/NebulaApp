@@ -5,6 +5,8 @@ import Login from "./Login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { AuthProvider } from "../context/AuthContext";
 import PrivateRoute from "./PrivateRoute";
+import Profile from "./profile/Profile";
+import CreateSystem from "./system/CreateSystem";
 
 function App() {
 	return (
@@ -12,10 +14,16 @@ function App() {
 			<AuthProvider>
 				<Router>
 					<Switch>
-						<Route exact path="/" component={Landing} />
-						<PrivateRoute exact path="/home" component={Home} />
+						<PrivateRoute exact path="/" component={Home} />
+						<Route exact path="/landing" component={Landing} />
 						<Route exact path="/register" component={Register} />
 						<Route exact path="/login" component={Login} />
+						<PrivateRoute exact path="/profile" component={Profile} />
+						<PrivateRoute
+							exact
+							path="/systems/create"
+							component={CreateSystem}
+						/>
 					</Switch>
 				</Router>
 			</AuthProvider>

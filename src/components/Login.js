@@ -33,7 +33,7 @@ const Login = () => {
 				email: emailRef.current.value,
 				password: passwordRef.current.value,
 			});
-			history.push("/home");
+			history.push("/");
 		} catch {
 			setError("Failed to login an account");
 		}
@@ -44,7 +44,7 @@ const Login = () => {
 		<>
 			<header>
 				<FaWindowClose
-					onClick={() => history.push("/")}
+					onClick={() => history.push("/landing")}
 					size={32}
 					className="close-button"
 				/>
