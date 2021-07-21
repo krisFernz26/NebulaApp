@@ -7,6 +7,7 @@ import { AuthProvider } from "../context/AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import Profile from "./profile/Profile";
 import CreateSystem from "./system/CreateSystem";
+import SystemInfo from "./system/SystemInfo";
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 							path="/systems/create"
 							component={CreateSystem}
 						/>
+						<PrivateRoute exact path="/systems/:id" component={SystemInfo} />
 					</Switch>
 				</Router>
 			</AuthProvider>

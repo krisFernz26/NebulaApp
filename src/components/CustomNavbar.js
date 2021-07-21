@@ -55,7 +55,8 @@ const CustomNavbar = () => {
 					</Container>
 					<Container>
 						<Link to="/profile">
-							<div className="profile-link"></div>
+							Profile
+							{/* <div className="profile-link"></div> */}
 						</Link>
 					</Container>
 				</Nav>

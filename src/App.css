@@ -138,3 +138,51 @@ input[type="password"]:focus {
 	align-items: center;
 	justify-content: center;
 }
+
+.add-btn {
+	color: var(--secondary-color);
+	width: 50px;
+	height: 50px;
+	border: 2px solid var(--secondary-color);
+	border-radius: 100%;
+	text-align: center;
+}
+
+.system-title {
+	margin-top: 8vh;
+}
+.g-4 {
+	--bs-gutter-y: 0.5rem;
+}
+
+.stars h3 {
+	margin-top: 2.8rem;
+}
+
+.planets h3,
+.satellites h3 {
+	margin-top: 50px;
+}
+
+.satellites {
+	margin-bottom: 10%;
+}
+
+.selected {
+	background-color: rgba(255, 255, 255, 1);
+}
+
+.star-card,
+.system-card,
+.planet-card,
+.satellite-card {
+	transition: all 500ms;
+	cursor: pointer;
+}
+
+.star-card:hover,
+.system-card:hover,
+.planet-card:hover,
+.satellite-card:hover {
+	background-color: rgba(255, 255, 255, 0.74);
+}
