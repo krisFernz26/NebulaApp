@@ -72,7 +72,7 @@ const SystemInfo = () => {
 									<StarCard star={star} />
 								</Col>
 							))}
-						{currentUser.id === system.uid ? (
+						{currentUser.uid === system.uid ? (
 							<Col className="mx-auto d-flex justify-content-center align-items-center">
 								<AddCard item="Star" />
 							</Col>
@@ -111,7 +111,7 @@ const SystemInfo = () => {
 								<StarCard star={planet} />
 							</Col>
 						))}
-					{currentUser.id === system.uid ? (
+					{currentUser.uid === system.uid ? (
 						<Col className="mx-auto d-flex justify-content-center align-items-center">
 							<AddCard item="Planet" />
 						</Col>
@@ -144,7 +144,7 @@ const SystemInfo = () => {
 									<StarCard star={satellite} />
 								</Col>
 							))}
-						{currentUser.id === system.uid ? (
+						{currentUser.uid === system.uid ? (
 							<Col className="mx-auto d-flex justify-content-center align-items-center">
 								<AddCard item="Satellite" />
 							</Col>

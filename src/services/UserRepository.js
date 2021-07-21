@@ -14,15 +14,17 @@ export function logoutUser() {
 }
 
 export function createUser({ email, password, name }) {
-	db.collection("users")
-		.add({ email: email, name: name })
-		.then((docRef) => {
-			console.log("Document written with ID: ", docRef.id);
-		})
-		.catch((error) => {
-			console.error("Error adding document: ", error);
-		});
-	return auth.createUserWithEmailAndPassword(email, password);
+	return auth.createUserWithEmailAndPassword(email, password).then((user) => {
+		db.collection("users")
+			.doc(user.user.uid)
+			.set({ email: email, name: name })
+			.then((docRef) => {
+				console.log("Document written with ID: ", docRef.id);
+			})
+			.catch((error) => {
+				console.error("Error adding document: ", error);
+			});
+	});
 }
 
 export function getUsers() {
