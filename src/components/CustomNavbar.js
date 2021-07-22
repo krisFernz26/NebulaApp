@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 import React from "react";
 import StyledButton from "./StyledButton";
@@ -9,6 +10,7 @@ const CustomNavbar = () => {
 	const history = useHistory();
 	let listener = null;
 	const [scrollState, setScrollState] = useState("top");
+	const { currentUser } = useAuth();
 
 	useEffect(() => {
 		listener = document.addEventListener("scroll", (e) => {
@@ -55,8 +57,10 @@ const CustomNavbar = () => {
 					</Container>
 					<Container>
 						<Link to="/profile">
-							Profile
-							{/* <div className="profile-link"></div> */}
+							{/* Profile */ console.log(currentUser.photoURL)}
+							<div className="profile-link">
+								<img src={currentUser.photoURL} alt="" srcset="" />
+							</div>
 						</Link>
 					</Container>
 				</Nav>

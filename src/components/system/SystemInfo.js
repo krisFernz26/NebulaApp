@@ -10,6 +10,8 @@ import StarCard from "../star/StarCard";
 import AddCard from "../AddCard";
 import SystemsGrid from "./SystemsGrid";
 import { useAuth } from "../../context/AuthContext";
+import PlanetCard from "../planet/PlanetCard";
+import StyledButton from "../StyledButton";
 
 const SystemInfo = () => {
 	let { currentUser } = useAuth();
@@ -29,6 +31,44 @@ const SystemInfo = () => {
 			});
 		// setSystem({ id: id, ...data.data() });
 		console.log(system);
+	};
+
+	const deleteStar = (selectedStar) => {
+		const stars = system.stars;
+
+		const newStars = stars.filter((star) => star !== selectedStar);
+
+		db.collection("systems")
+			.doc(system.id)
+			.update({
+				stars: newStars,
+			})
+			.then(() => fetchSystem());
+	};
+
+	const deletePlanet = (selectedPlanet) => {
+		db.collection("systems")
+			.doc(system.id)
+			.update({
+				planets: firebase.firestore.FieldValue.arrayRemove(selectedPlanet),
+			})
+			.then(() => fetchSystem())
+			.catch((e) => console.error(e));
+	};
+
+	const deleteSatellite = (selectedSatellite) => {
+		const satellites = system.satellites;
+
+		const newSatellites = satellites.filter(
+			(satellite) => satellite !== selectedSatellite
+		);
+
+		db.collection("systems")
+			.doc(system.id)
+			.update({
+				satellites: newSatellites,
+			})
+			.then(() => fetchSystem());
 	};
 
 	useEffect(() => {
@@ -74,7 +114,12 @@ const SystemInfo = () => {
 							))}
 						{currentUser.uid === system.uid ? (
 							<Col className="mx-auto d-flex justify-content-center align-items-center">
-								<AddCard item="Star" />
+								<AddCard
+									item="Star"
+									onClick={() => {
+										history.push(`/systems/${system.id}/create/star`);
+									}}
+								/>
 							</Col>
 						) : (
 							""
@@ -103,17 +148,25 @@ const SystemInfo = () => {
 					className="g-4 mx-auto"
 				>
 					{system.planets &&
-						system.planets.map((planet) => (
+						system.planets.map((planet, idx) => (
 							<Col
-								key={planet.id}
+								key={`${planet.name}-${idx}`}
 								className="mx-auto d-flex justify-content-center align-items-center"
 							>
-								<StarCard star={planet} />
+								<PlanetCard
+									planet={planet}
+									onClick={() => deletePlanet(planet)}
+								/>
 							</Col>
 						))}
 					{currentUser.uid === system.uid ? (
 						<Col className="mx-auto d-flex justify-content-center align-items-center">
-							<AddCard item="Planet" />
+							<AddCard
+								item="Planet"
+								onClick={() => {
+									history.push(`/systems/${system.id}/create/planet`);
+								}}
+							/>
 						</Col>
 					) : (
 						""
@@ -146,7 +199,12 @@ const SystemInfo = () => {
 							))}
 						{currentUser.uid === system.uid ? (
 							<Col className="mx-auto d-flex justify-content-center align-items-center">
-								<AddCard item="Satellite" />
+								<AddCard
+									item="Satellite"
+									onClick={() => {
+										history.push(`/systems/${system.id}/create/satellite`);
+									}}
+								/>
 							</Col>
 						) : (
 							""

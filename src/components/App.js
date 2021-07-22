@@ -7,6 +7,13 @@ import { AuthProvider } from "../context/AuthContext";
 import PrivateRoute from "./PrivateRoute";
 import Profile from "./profile/Profile";
 import CreateSystem from "./system/CreateSystem";
+import EditSystem from "./system/EditSystem";
+import CreateStar from "./star/CreateStar";
+import EditStar from "./star/EditStar";
+import CreatePlanet from "./planet/CreatePlanet";
+import EditPlanet from "./planet/EditPlanet";
+import CreateSatellite from "./satellite/CreateSatellite";
+import EditSatellite from "./satellite/EditSatellite";
 import SystemInfo from "./system/SystemInfo";
 
 function App() {
@@ -25,7 +32,43 @@ function App() {
 							path="/systems/create"
 							component={CreateSystem}
 						/>
+						<PrivateRoute
+							exact
+							path="/systems/:id/edit"
+							component={EditSystem}
+						/>
 						<PrivateRoute exact path="/systems/:id" component={SystemInfo} />
+						<PrivateRoute
+							exact
+							path="/systems/:id/create/star"
+							component={CreateStar}
+						/>
+						<PrivateRoute
+							exact
+							path="/systems/:id/edit/star/:star_id"
+							component={EditStar}
+						/>
+						<PrivateRoute
+							exact
+							path="/systems/:id/create/planet"
+							component={CreatePlanet}
+						/>
+						<PrivateRoute
+							exact
+							path="/systems/:id/edit/planet/:planet_id"
+							component={EditPlanet}
+						/>
+						<PrivateRoute
+							exact
+							path="/systems/:id/create/satellite"
+							component={CreateSatellite}
+						/>
+
+						<PrivateRoute
+							exact
+							path="/systems/:id/edit/satellite/:satellite_id"
+							component={EditSatellite}
+						/>
 					</Switch>
 				</Router>
 			</AuthProvider>

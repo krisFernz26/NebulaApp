@@ -3,6 +3,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { FaWindowClose } from "react-icons/fa";
 import { Link, useHistory } from "react-router-dom";
 import firestore from "firebase/firestore";
+import firebase from "firebase";
 import app from "../firebase";
 import { StyledButton } from "./StyledButton";
 import { useAuth } from "../context/AuthContext";
@@ -10,9 +11,12 @@ import { Card, Container, Form, Alert } from "react-bootstrap";
 
 const Register = () => {
 	const history = useHistory();
-	const { createUser } = useAuth();
+	const { createUser, currentUser } = useAuth();
 	const [image, setImage] = useState();
 	const [previewImage, setPreviewImage] = useState();
+	const [imageUrl, setImageUrl] = useState(
+		"https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png"
+	);
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const confirmPasswordRef = useRef();
@@ -43,16 +47,69 @@ const Register = () => {
 		try {
 			setError("");
 			setLoading(true);
-			await createUser({
-				email: emailRef.current.value,
-				password: passwordRef.current.value,
-				name: nameRef.current.value,
-			});
-			history.push("/");
+			if (image) {
+				handleUpload();
+			}
+			try {
+				setError("");
+				setLoading(true);
+				await createUser({
+					email: emailRef.current.value,
+					password: passwordRef.current.value,
+					name: nameRef.current.value,
+					imageUrl: imageUrl,
+				});
+				history.push("/");
+			} catch {
+				setError("Failed to create an account");
+			}
 		} catch {
 			setError("Failed to create an account");
 		}
 		setLoading(false);
+	};
+
+	const handleOnChange = (e) => {
+		setImage(e.target.files[0]);
+		setPreviewImage(URL.createObjectURL(e.target.files[0]));
+		console.log(image);
+	};
+	const handleUpload = () => {
+		let file = image;
+		var storage = app.storage();
+		var storageRef = storage.ref();
+		var uploadTask = storageRef
+			.child("images/" + nameRef.current.value + "/profile_pic/" + image.name)
+			.put(file);
+
+		uploadTask.on(
+			firebase.storage.TaskEvent.STATE_CHANGED,
+			(snapshot) => {
+				var progress =
+					Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+			},
+			(error) => {
+				throw error;
+			},
+			() => {
+				uploadTask.snapshot.ref.getDownloadURL().then(async (url) => {
+					setImageUrl(url);
+					try {
+						setError("");
+						setLoading(true);
+						await createUser({
+							email: emailRef.current.value,
+							password: passwordRef.current.value,
+							name: nameRef.current.value,
+							imageUrl: url !== null ? url : imageUrl,
+						});
+						history.push("/");
+					} catch {
+						setError("Failed to create an account");
+					}
+				});
+			}
+		);
 	};
 
 	return (
@@ -104,12 +161,14 @@ const Register = () => {
 										type="file"
 										name="file-upload"
 										id="profile-picker"
-										onChange={(event) => {
-											setImage(event.target.files[0]);
-											setPreviewImage(
-												URL.createObjectURL(event.target.files[0])
-											);
-										}}
+										onChange={handleOnChange}
+										// onChange={(event) => {
+										// 	setImage(event.target.files[0]);
+										// 	setPreviewImage(
+										// 		URL.createObjectURL(event.target.files[0])
+										// 	);
+										// 	console.log(image);
+										// }}
 									/>
 								</label>
 								<Form.Group

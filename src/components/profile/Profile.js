@@ -15,25 +15,6 @@ const Profile = () => {
 	const db = firebase.firestore();
 	const { currentUser } = useAuth();
 
-	useEffect(() => {
-		return fetchUser();
-	}, []);
-
-	const fetchUser = () => {
-		setLoading(true);
-		db.collection("users")
-			.doc(currentUser.uid)
-			.get()
-			.then((snapshot) => {
-				setUser({ id: currentUser.uid, ...snapshot.data() });
-				console.log(snapshot.name);
-				setLoading(false);
-			})
-			.catch((e) => {
-				setLoading(false);
-				console.error(e);
-			});
-	};
 	return (
 		<>
 			<header>
@@ -46,7 +27,7 @@ const Profile = () => {
 			{!loading && (
 				<Col>
 					<Row className="d-flex justify-content-center align-items-center">
-						<h1 className="text-center">{user.name}</h1>
+						<h1 className="text-center">{currentUser.displayName}</h1>
 					</Row>
 					<Row className="d-flex justify-content-center align-items-center">
 						<StyledButton
