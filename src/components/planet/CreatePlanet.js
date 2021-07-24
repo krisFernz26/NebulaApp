@@ -38,7 +38,6 @@ const CreatePlanet = () => {
 			.doc(id)
 			.get()
 			.then((snapshot) => {
-				console.log(snapshot.data().stars);
 				setStars(snapshot.data().stars);
 			})
 			.catch((e) => {
@@ -50,8 +49,8 @@ const CreatePlanet = () => {
 		return fetchSystem();
 	}, []);
 
-	const createPlanet = async () => {
-		if (!star) {
+	const createPlanet = () => {
+		if (star == undefined) {
 			return setError("Select a star for your planet");
 		}
 		if (nameRef.current.value == "") {
@@ -218,19 +217,39 @@ const CreatePlanet = () => {
 										/>
 									</label>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formSun">
+								<Form.Group className="mb-3" controlId="formStar">
 									<Form.Label>Star*</Form.Label>
 									<Dropdown>
-										<Dropdown.Toggle variant="secondary" id="dropdown-basic">
+										<Dropdown.Toggle
+											variant="secondary"
+											id="dropdown-basic"
+											style={{
+												width: "100%",
+												border: "1px solid var(--secondary-color)",
+												backgroundColor: "var(--main-bg-color)",
+											}}
+										>
 											{star.name}
 										</Dropdown.Toggle>
 
-										<Dropdown.Menu>
+										<Dropdown.Menu
+											style={{
+												width: "100%",
+												border: "1px solid var(--secondary-color)",
+												backgroundColor: "var(--main-bg-color)",
+											}}
+										>
 											{stars.map((star) => {
 												return (
 													<Dropdown.Item
 														onSelect={() => setStar(star)}
 														key={star.id}
+														className="text-center"
+														style={{
+															width: "100%",
+															backgroundColor: "var(--main-bg-color)",
+															color: "var(--secondary-color)",
+														}}
 													>
 														{star.name}
 													</Dropdown.Item>
@@ -243,7 +262,7 @@ const CreatePlanet = () => {
 									<Form.Label>Name*</Form.Label>
 									<Form.Control type="text" placeholder="Earth" ref={nameRef} />
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formAlternateNames">
 									<Form.Label>
 										Alternate Names (separated by a comma)
 									</Form.Label>
@@ -253,7 +272,10 @@ const CreatePlanet = () => {
 										ref={alternateNamesRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group
+									className="mb-3"
+									controlId="formAverageOrbitalSpeed"
+								>
 									<Form.Label>Average Orbital Speed</Form.Label>
 									<Form.Control
 										type="text"
@@ -261,7 +283,7 @@ const CreatePlanet = () => {
 										ref={averageOrbitalSpeedRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formOrbitalPeriod">
 									<Form.Label>Orbital Period</Form.Label>
 									<Form.Control
 										type="text"
@@ -269,7 +291,7 @@ const CreatePlanet = () => {
 										ref={orbitalPeriodRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formEquatorialRadius">
 									<Form.Label>Equatorial Radius</Form.Label>
 									<Form.Control
 										type="text"
@@ -277,7 +299,7 @@ const CreatePlanet = () => {
 										ref={equatorialRadiusRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formMass">
 									<Form.Label>Mass</Form.Label>
 									<Form.Control
 										type="text"
@@ -285,7 +307,7 @@ const CreatePlanet = () => {
 										ref={massRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formAverageDensity">
 									<Form.Label>Average Density</Form.Label>
 									<Form.Control
 										type="text"
@@ -293,7 +315,7 @@ const CreatePlanet = () => {
 										ref={averageDensityRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formSurfaceGravity">
 									<Form.Label>Surface Gravity</Form.Label>
 									<Form.Control
 										type="text"
@@ -301,7 +323,10 @@ const CreatePlanet = () => {
 										ref={surfaceGravityRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group
+									className="mb-3"
+									controlId="formEquatorialRotationVelocity"
+								>
 									<Form.Label>Equatorial Rotation Velocity</Form.Label>
 									<Form.Control
 										type="text"
@@ -309,7 +334,7 @@ const CreatePlanet = () => {
 										ref={equatorialRotationVelocityRef}
 									/>
 								</Form.Group>
-								<Form.Group className="mb-3" controlId="formName">
+								<Form.Group className="mb-3" controlId="formSurfacePressure">
 									<Form.Label>Surface Pressure</Form.Label>
 									<Form.Control
 										type="text"

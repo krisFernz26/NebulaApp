@@ -30,7 +30,7 @@ const StarCard = ({ star, systemId, isCreator }) => {
 				) : (
 					""
 				)}
-				{star.alternate_names != [] ? (
+				{star.alternate_names[0] != "" ? (
 					<Card.Text style={{ color: "var(--main-bg-color)" }}>
 						<strong>Alternate Names:</strong> {star.alternate_names.join(", ")}
 					</Card.Text>

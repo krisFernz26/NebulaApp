@@ -29,7 +29,7 @@ const PlanetCard = ({ planet, systemId, isCreator }) => {
 				) : (
 					""
 				)}
-				{planet.alternate_names != [] ? (
+				{planet.alternate_names[0] != "" ? (
 					<Card.Text style={{ color: "var(--main-bg-color)" }}>
 						<strong>Alternate Names:</strong>{" "}
 						{planet.alternate_names.join(", ")}
