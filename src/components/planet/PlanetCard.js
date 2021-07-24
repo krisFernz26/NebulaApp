@@ -1,14 +1,34 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import StyledButton from "../StyledButton";
+import firestore from "firebase/firestore";
+import firebase from "firebase";
 
-const PlanetCard = ({ planet }) => {
+const PlanetCard = ({ planet, systemId, isCreator }) => {
+	const db = firebase.firestore();
+
+	const deletePlanet = () => {
+		db.collection("systems")
+			.doc(systemId)
+			.update({
+				planets: firebase.firestore.FieldValue.arrayRemove(planet),
+			})
+			.then(() => window.location.reload());
+	};
 	return (
 		<Card style={{ width: "18rem" }} className="planet-card">
-			<Card.Img variant="top" src={planet.img} />
+			<Card.Img variant="top" src={planet.img} alt="" />
 			<Card.Body>
 				<Card.Title style={{ color: "var(--main-bg-color)" }}>
 					{planet.name}
 				</Card.Title>
+				{planet.star != "" ? (
+					<Card.Text style={{ color: "var(--main-bg-color)" }}>
+						<strong>Star:</strong> {planet.star}
+					</Card.Text>
+				) : (
+					""
+				)}
 				{planet.alternate_names != [] ? (
 					<Card.Text style={{ color: "var(--main-bg-color)" }}>
 						<strong>Alternate Names:</strong>{" "}
@@ -65,6 +85,13 @@ const PlanetCard = ({ planet }) => {
 					<Card.Text style={{ color: "var(--main-bg-color)" }}>
 						<strong>Surface Pressure:</strong> {planet.surface_pressure}
 					</Card.Text>
+				) : (
+					""
+				)}
+				{isCreator ? (
+					<StyledButton variant="danger" onClick={() => deletePlanet()}>
+						Delete
+					</StyledButton>
 				) : (
 					""
 				)}

@@ -12,8 +12,6 @@ import CreateStar from "./star/CreateStar";
 import EditStar from "./star/EditStar";
 import CreatePlanet from "./planet/CreatePlanet";
 import EditPlanet from "./planet/EditPlanet";
-import CreateSatellite from "./satellite/CreateSatellite";
-import EditSatellite from "./satellite/EditSatellite";
 import SystemInfo from "./system/SystemInfo";
 
 function App() {
@@ -57,17 +55,6 @@ function App() {
 							exact
 							path="/systems/:id/edit/planet/:planet_id"
 							component={EditPlanet}
-						/>
-						<PrivateRoute
-							exact
-							path="/systems/:id/create/satellite"
-							component={CreateSatellite}
-						/>
-
-						<PrivateRoute
-							exact
-							path="/systems/:id/edit/satellite/:satellite_id"
-							component={EditSatellite}
 						/>
 					</Switch>
 				</Router>

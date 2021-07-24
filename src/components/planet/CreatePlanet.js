@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { FaWindowClose } from "react-icons/fa";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -6,7 +6,8 @@ import firestore from "firebase/firestore";
 import firebase from "firebase";
 import app from "../../firebase";
 import { StyledButton } from "../StyledButton";
-import { Card, Container, Form, Alert } from "react-bootstrap";
+import { Card, Container, Form, Alert, Dropdown } from "react-bootstrap";
+import { uuid } from "uuidv4";
 
 const CreatePlanet = () => {
 	const history = useHistory();
@@ -15,6 +16,7 @@ const CreatePlanet = () => {
 	const [previewImage, setPreviewImage] = useState();
 	const [imageUrl, setImageUrl] = useState("");
 	const alternateNamesRef = useRef();
+	const [star, setStar] = useState({});
 	const averageOrbitalSpeedRef = useRef();
 	const nameRef = useRef();
 	const orbitalPeriodRef = useRef();
@@ -27,10 +29,33 @@ const CreatePlanet = () => {
 	const [error, setError] = useState();
 	const [loading, setLoading] = useState(false);
 	const db = firebase.firestore();
+	const generatedId = uuid();
+	const [stars, setStars] = useState([]);
+
+	const fetchSystem = async () => {
+		await db
+			.collection("systems")
+			.doc(id)
+			.get()
+			.then((snapshot) => {
+				console.log(snapshot.data().stars);
+				setStars(snapshot.data().stars);
+			})
+			.catch((e) => {
+				console.error(e);
+			});
+	};
+
+	useEffect(() => {
+		return fetchSystem();
+	}, []);
 
 	const createPlanet = async () => {
+		if (!star) {
+			return setError("Select a star for your planet");
+		}
 		if (nameRef.current.value == "") {
-			return setError("Enter a name for your star");
+			return setError("Enter a name for your planet");
 		}
 
 		try {
@@ -43,8 +68,10 @@ const CreatePlanet = () => {
 					.doc(id)
 					.update({
 						planets: firebase.firestore.FieldValue.arrayUnion({
+							id: generatedId,
 							name: nameRef.current.value,
 							img: imageUrl,
+							star: star.name,
 							alternate_names: alternateNamesRef.current.value.split(","),
 							average_orbital_speed: averageOrbitalSpeedRef.current.value,
 							orbital_period: orbitalPeriodRef.current.value,
@@ -101,8 +128,10 @@ const CreatePlanet = () => {
 							.doc(id)
 							.update({
 								planets: firebase.firestore.FieldValue.arrayUnion({
+									id: generatedId,
 									name: nameRef.current.value,
 									img: url,
+									star: star.name,
 									alternate_names: alternateNamesRef.current.value.split(","),
 									average_orbital_speed: averageOrbitalSpeedRef.current.value,
 									orbital_period: orbitalPeriodRef.current.value,
@@ -167,26 +196,49 @@ const CreatePlanet = () => {
 								""
 							)}
 							<Form>
-								<label htmlFor="profile-picker">
-									<div className="profile-div">
-										{image == null ? (
-											<BiImageAdd size={42} />
-										) : (
-											<img
-												src={previewImage}
-												alt=""
-												className="profile-image-large"
-											/>
-										)}
-									</div>
-									<input
-										accept="image/*"
-										type="file"
-										name="file-upload"
-										id="profile-picker"
-										onChange={handleOnChange}
-									/>
-								</label>
+								<Form.Group className="mb-3" controlId="formPic">
+									<label htmlFor="profile-picker">
+										<div className="image-preview-div">
+											{image == null ? (
+												<BiImageAdd size={42} />
+											) : (
+												<img
+													src={previewImage}
+													alt=""
+													className="profile-image-large"
+												/>
+											)}
+										</div>
+										<input
+											accept="image/*"
+											type="file"
+											name="file-upload"
+											id="profile-picker"
+											onChange={handleOnChange}
+										/>
+									</label>
+								</Form.Group>
+								<Form.Group className="mb-3" controlId="formSun">
+									<Form.Label>Star*</Form.Label>
+									<Dropdown>
+										<Dropdown.Toggle variant="secondary" id="dropdown-basic">
+											{star.name}
+										</Dropdown.Toggle>
+
+										<Dropdown.Menu>
+											{stars.map((star) => {
+												return (
+													<Dropdown.Item
+														onSelect={() => setStar(star)}
+														key={star.id}
+													>
+														{star.name}
+													</Dropdown.Item>
+												);
+											})}
+										</Dropdown.Menu>
+									</Dropdown>
+								</Form.Group>
 								<Form.Group className="mb-3" controlId="formName">
 									<Form.Label>Name*</Form.Label>
 									<Form.Control type="text" placeholder="Earth" ref={nameRef} />

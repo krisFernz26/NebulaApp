@@ -63,6 +63,7 @@ a:hover {
 	position: fixed;
 	top: 20px;
 	left: 20px;
+	z-index: 1;
 }
 .close-button:hover {
 	color: rgba(255, 255, 255, 1);
@@ -191,4 +192,28 @@ input[type="password"]:focus {
 .satellite-card:hover {
 	background-color: rgba(255, 255, 255, 0.74);
 	box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.541);
+}
+
+.image-preview-div {
+	cursor: pointer;
+	width: 150px;
+	height: 150px;
+	background-color: transparent;
+	border-radius: 5px;
+	border: 1px solid var(--secondary-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+	transition: all 100ms;
+}
+.image-preview-div:hover {
+	background-color: var(--secondary-color);
+	color: var(--main-bg-color);
+	box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.473);
+}
+.image-preview-div .profile-image-large {
+	border-radius: 0%;
+	width: 150px;
+	height: 150px;
 }

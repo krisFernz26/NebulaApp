@@ -19,6 +19,7 @@
 		"react-scripts": "^4.0.3",
 		"react-three-fiber": "^6.0.13",
 		"three": "^0.130.1",
+		"uuidv4": "^6.2.11",
 		"web-vitals": "^1.0.1"
 	},
 	"scripts": {

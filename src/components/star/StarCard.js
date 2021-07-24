@@ -1,10 +1,24 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import firestore from "firebase/firestore";
+import firebase from "firebase";
+import StyledButton from "../StyledButton";
 
-const StarCard = ({ star }) => {
+const StarCard = ({ star, systemId, isCreator }) => {
+	const db = firebase.firestore();
+
+	const deletePlanet = () => {
+		db.collection("systems")
+			.doc(systemId)
+			.update({
+				stars: firebase.firestore.FieldValue.arrayRemove(star),
+			})
+			.then(() => window.location.reload());
+	};
+
 	return (
 		<Card style={{ width: "18rem" }} className="star-card">
-			<Card.Img variant="top" src={star.img} />
+			<Card.Img variant="top" src={star.img} alt="" />
 			<Card.Body>
 				<Card.Title style={{ color: "var(--main-bg-color)" }}>
 					{star.name}
@@ -63,6 +77,13 @@ const StarCard = ({ star }) => {
 					<Card.Text style={{ color: "var(--main-bg-color)" }}>
 						<strong>Surface Area:</strong> {star.surface_area}
 					</Card.Text>
+				) : (
+					""
+				)}
+				{isCreator ? (
+					<StyledButton variant="danger" onClick={() => deletePlanet()}>
+						Delete
+					</StyledButton>
 				) : (
 					""
 				)}

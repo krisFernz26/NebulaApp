@@ -21,7 +21,6 @@ const SystemInfo = () => {
 	const history = useHistory();
 
 	const fetchSystem = async () => {
-		// const response = db.collection("systems").doc(id);
 		db.collection("systems")
 			.doc(id)
 			.get()
@@ -29,46 +28,7 @@ const SystemInfo = () => {
 			.catch((e) => {
 				console.error(e);
 			});
-		// setSystem({ id: id, ...data.data() });
 		console.log(system);
-	};
-
-	const deleteStar = (selectedStar) => {
-		const stars = system.stars;
-
-		const newStars = stars.filter((star) => star !== selectedStar);
-
-		db.collection("systems")
-			.doc(system.id)
-			.update({
-				stars: newStars,
-			})
-			.then(() => fetchSystem());
-	};
-
-	const deletePlanet = (selectedPlanet) => {
-		db.collection("systems")
-			.doc(system.id)
-			.update({
-				planets: firebase.firestore.FieldValue.arrayRemove(selectedPlanet),
-			})
-			.then(() => fetchSystem())
-			.catch((e) => console.error(e));
-	};
-
-	const deleteSatellite = (selectedSatellite) => {
-		const satellites = system.satellites;
-
-		const newSatellites = satellites.filter(
-			(satellite) => satellite !== selectedSatellite
-		);
-
-		db.collection("systems")
-			.doc(system.id)
-			.update({
-				satellites: newSatellites,
-			})
-			.then(() => fetchSystem());
 	};
 
 	useEffect(() => {
@@ -109,7 +69,11 @@ const SystemInfo = () => {
 									key={star.id}
 									className="mx-auto d-flex justify-content-center align-items-center"
 								>
-									<StarCard star={star} />
+									<StarCard
+										star={star}
+										systemId={system.id}
+										isCreator={system.uid === currentUser.uid ? true : false}
+									/>
 								</Col>
 							))}
 						{currentUser.uid === system.uid ? (
@@ -137,14 +101,14 @@ const SystemInfo = () => {
 			{
 				// Planets
 			}
-			<Row className="g-1 mx-auto planets">
+			<Row className="g-1 mx-auto planets" style={{ marginBottom: "50px" }}>
 				<Row className="g-1">
 					<h3 className="text-center">Planets</h3>
 				</Row>
 				<Row
 					xs={1}
 					md={system.planets == [] ? 1 : 3}
-					lg={system.planets == [] ? 1 : "auto"}
+					lg={system.planets == [] ? 1 : 5}
 					className="g-4 mx-auto"
 				>
 					{system.planets &&
@@ -155,7 +119,8 @@ const SystemInfo = () => {
 							>
 								<PlanetCard
 									planet={planet}
-									onClick={() => deletePlanet(planet)}
+									systemId={system.id}
+									isCreator={system.uid === currentUser.uid ? true : false}
 								/>
 							</Col>
 						))}
@@ -172,49 +137,6 @@ const SystemInfo = () => {
 						""
 					)}
 				</Row>
-			</Row>
-
-			{
-				// Satellites
-			}
-			<Row className="g-1 mx-auto satellites">
-				<Row className="g-1">
-					<h3 className="text-center">Satellites</h3>
-				</Row>
-				{system.satellites != [] ? (
-					<Row
-						xs={1}
-						md={system.satellites == [] ? 1 : 3}
-						lg={system.satellites == [] ? 1 : "auto"}
-						className="g-4 mx-auto"
-					>
-						{system.satellites &&
-							system.satellites.map((satellite) => (
-								<Col
-									key={satellite.id}
-									className="mx-auto d-flex justify-content-center align-items-center"
-								>
-									<StarCard star={satellite} />
-								</Col>
-							))}
-						{currentUser.uid === system.uid ? (
-							<Col className="mx-auto d-flex justify-content-center align-items-center">
-								<AddCard
-									item="Satellite"
-									onClick={() => {
-										history.push(`/systems/${system.id}/create/satellite`);
-									}}
-								/>
-							</Col>
-						) : (
-							""
-						)}
-					</Row>
-				) : (
-					<Row className="g-1">
-						<h3 className="text-center">No Stars</h3>
-					</Row>
-				)}
 			</Row>
 		</>
 	);
