@@ -77,7 +77,9 @@ const SystemInfo = () => {
 			}
 			<Row className="g-1 mx-auto stars">
 				<Row className="g-1">
-					<h3 className="text-center">Stars (3 max)</h3>
+					<h3 className="text-center">
+						Star/s {system.uid == currentUser.uid ? <>(3 max)</> : ""}
+					</h3>
 				</Row>
 				{system.stars != [] ? (
 					<Row
@@ -126,7 +128,7 @@ const SystemInfo = () => {
 			}
 			<Row className="g-1 mx-auto planets" style={{ marginBottom: "50px" }}>
 				<Row className="g-1">
-					<h3 className="text-center">Planets</h3>
+					<h3 className="text-center">Planet/s</h3>
 				</Row>
 				<Row
 					xs={1}

@@ -100,7 +100,7 @@ const Register = () => {
 							email: emailRef.current.value,
 							password: passwordRef.current.value,
 							name: nameRef.current.value,
-							imageUrl: url !== null ? url : imageUrl,
+							imageUrl: url,
 						});
 						history.push("/");
 					} catch {
