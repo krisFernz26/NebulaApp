@@ -72,7 +72,6 @@ const Register = () => {
 	const handleOnChange = (e) => {
 		setImage(e.target.files[0]);
 		setPreviewImage(URL.createObjectURL(e.target.files[0]));
-		console.log(image);
 	};
 	const handleUpload = () => {
 		let file = image;
@@ -162,13 +161,6 @@ const Register = () => {
 										name="file-upload"
 										id="profile-picker"
 										onChange={handleOnChange}
-										// onChange={(event) => {
-										// 	setImage(event.target.files[0]);
-										// 	setPreviewImage(
-										// 		URL.createObjectURL(event.target.files[0])
-										// 	);
-										// 	console.log(image);
-										// }}
 									/>
 								</label>
 								<Form.Group

@@ -3,6 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import SystemCard from "./SystemCard";
 
 const SystemsGrid = ({ systems }) => {
+	console.log(systems);
 	return (
 		<div className="systems-grid">
 			<Row xs={1} md={2} lg="auto" className="g-4 mx-auto">

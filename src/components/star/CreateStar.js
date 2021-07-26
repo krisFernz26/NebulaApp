@@ -6,7 +6,7 @@ import firestore from "firebase/firestore";
 import firebase from "firebase";
 import app from "../../firebase";
 import { StyledButton } from "../StyledButton";
-import { Card, Container, Form, Alert, Dropdown } from "react-bootstrap";
+import { Card, Container, Form, Alert } from "react-bootstrap";
 import { uuid } from "uuidv4";
 
 const CreateStar = () => {
@@ -39,7 +39,7 @@ const CreateStar = () => {
 			setLoading(true);
 			if (image) {
 				handleUpload();
-			} else
+			} else {
 				db.collection("systems")
 					.doc(id)
 					.update({
@@ -60,12 +60,11 @@ const CreateStar = () => {
 					})
 					.then((_) => {
 						history.push("/systems/" + id);
-					})
-					.catch((error) => {
-						console.error(error);
 					});
+			}
 		} catch {
 			setError("Failed to create a star");
+			window.scrollTo(0, 0);
 		}
 		setLoading(false);
 	};
@@ -73,14 +72,16 @@ const CreateStar = () => {
 	const handleOnChange = (e) => {
 		setImage(e.target.files[0]);
 		setPreviewImage(URL.createObjectURL(e.target.files[0]));
-		console.log(image);
 	};
+
 	const handleUpload = () => {
 		let file = image;
 		var storage = app.storage();
 		var storageRef = storage.ref();
 		var uploadTask = storageRef
-			.child("images/" + id + "/stars/" + image.name)
+			.child(
+				"images/" + id + "/stars/" + nameRef.current.value + "/" + image.name
+			)
 			.put(file);
 
 		uploadTask.on(
@@ -97,7 +98,6 @@ const CreateStar = () => {
 					setImageUrl(url);
 					try {
 						setError("");
-						setLoading(true);
 						db.collection("systems")
 							.doc(id)
 							.update({
@@ -105,7 +105,7 @@ const CreateStar = () => {
 									id: generatedId,
 									age: ageRef.current.value,
 									name: nameRef.current.value,
-									img: imageUrl,
+									img: url,
 									alternate_names: alternateNamesRef.current.value.split(","),
 									equatorial_radius: equatorialRadiusRef.current.value,
 									mass: massRef.current.value,
@@ -118,12 +118,10 @@ const CreateStar = () => {
 							})
 							.then((_) => {
 								history.push("/systems/" + id);
-							})
-							.catch((error) => {
-								console.error(error);
 							});
 					} catch {
 						setError("Failed to create a star");
+						window.scrollTo(0, 0);
 					}
 				});
 			}
@@ -194,6 +192,14 @@ const CreateStar = () => {
 									<Form.Label>Name*</Form.Label>
 									<Form.Control type="text" placeholder="Sun" ref={nameRef} />
 								</Form.Group>
+								<Form.Group className="mb-3" controlId="formAge">
+									<Form.Label>Age</Form.Label>
+									<Form.Control
+										type="text"
+										placeholder="4.6 Billion Years Old"
+										ref={ageRef}
+									/>
+								</Form.Group>
 								<Form.Group className="mb-3" controlId="formAlternateNames">
 									<Form.Label>
 										Alternate Names (separated by a comma)
@@ -260,7 +266,6 @@ const CreateStar = () => {
 									onClick={() => {
 										createStar();
 									}}
-									disabled={loading}
 								>
 									Create Star
 								</StyledButton>

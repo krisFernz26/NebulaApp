@@ -9,9 +9,7 @@ import Profile from "./profile/Profile";
 import CreateSystem from "./system/CreateSystem";
 import EditSystem from "./system/EditSystem";
 import CreateStar from "./star/CreateStar";
-import EditStar from "./star/EditStar";
 import CreatePlanet from "./planet/CreatePlanet";
-import EditPlanet from "./planet/EditPlanet";
 import SystemInfo from "./system/SystemInfo";
 
 function App() {
@@ -43,18 +41,8 @@ function App() {
 						/>
 						<PrivateRoute
 							exact
-							path="/systems/:id/edit/star/:star_id"
-							component={EditStar}
-						/>
-						<PrivateRoute
-							exact
 							path="/systems/:id/create/planet"
 							component={CreatePlanet}
-						/>
-						<PrivateRoute
-							exact
-							path="/systems/:id/edit/planet/:planet_id"
-							component={EditPlanet}
 						/>
 					</Switch>
 				</Router>

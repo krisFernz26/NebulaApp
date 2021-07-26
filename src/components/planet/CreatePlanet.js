@@ -50,7 +50,7 @@ const CreatePlanet = () => {
 	}, []);
 
 	const createPlanet = () => {
-		if (star == undefined) {
+		if (star == {}) {
 			return setError("Select a star for your planet");
 		}
 		if (nameRef.current.value == "") {
@@ -85,12 +85,10 @@ const CreatePlanet = () => {
 					})
 					.then((_) => {
 						history.push("/systems/" + id);
-					})
-					.catch((error) => {
-						console.error(error);
 					});
 		} catch {
 			setError("Failed to create a planet");
+			window.scrollTo(0, 0);
 		}
 		setLoading(false);
 	};
@@ -98,14 +96,15 @@ const CreatePlanet = () => {
 	const handleOnChange = (e) => {
 		setImage(e.target.files[0]);
 		setPreviewImage(URL.createObjectURL(e.target.files[0]));
-		console.log(image);
 	};
 	const handleUpload = () => {
 		let file = image;
 		var storage = app.storage();
 		var storageRef = storage.ref();
 		var uploadTask = storageRef
-			.child("images/" + id + "/planets/" + image.name)
+			.child(
+				"images/" + id + "/planets/" + nameRef.current.value + "/" + image.name
+			)
 			.put(file);
 
 		uploadTask.on(
@@ -122,7 +121,6 @@ const CreatePlanet = () => {
 					setImageUrl(url);
 					try {
 						setError("");
-						setLoading(true);
 						db.collection("systems")
 							.doc(id)
 							.update({
@@ -145,12 +143,10 @@ const CreatePlanet = () => {
 							})
 							.then((_) => {
 								history.push("/systems/" + id);
-							})
-							.catch((error) => {
-								console.error(error);
 							});
 					} catch {
 						setError("Failed to create a planet");
+						window.scrollTo(0, 0);
 					}
 				});
 			}
@@ -224,7 +220,7 @@ const CreatePlanet = () => {
 											variant="secondary"
 											id="dropdown-basic"
 											style={{
-												width: "100%",
+												width: "60%",
 												border: "1px solid var(--secondary-color)",
 												backgroundColor: "var(--main-bg-color)",
 											}}
@@ -234,7 +230,7 @@ const CreatePlanet = () => {
 
 										<Dropdown.Menu
 											style={{
-												width: "100%",
+												width: "60%",
 												border: "1px solid var(--secondary-color)",
 												backgroundColor: "var(--main-bg-color)",
 											}}

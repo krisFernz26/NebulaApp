@@ -57,9 +57,8 @@ const CustomNavbar = () => {
 					</Container>
 					<Container>
 						<Link to="/profile">
-							{/* Profile */ console.log(currentUser.photoURL)}
 							<div className="profile-link">
-								<img src={currentUser.photoURL} alt="" srcset="" />
+								<img src={currentUser.photoURL} alt="" srcSet="" />
 							</div>
 						</Link>
 					</Container>

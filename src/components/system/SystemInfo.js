@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import firestore from "firebase/firestore";
 import firebase from "firebase";
+import app from "../../firebase";
 import { FaWindowClose } from "react-icons/fa";
 import { GrAdd } from "react-icons/gr";
 import { useHistory } from "react-router-dom";
@@ -20,6 +21,18 @@ const SystemInfo = () => {
 	const db = firebase.firestore();
 	const history = useHistory();
 
+	const deleteSystem = () => {
+		var storage = app.storage();
+		var storageRef = storage.ref();
+		storageRef.child(`images/${id}`).delete();
+
+		db.collection("systems")
+			.doc(id)
+			.delete()
+			.then((_) => history.push("/"))
+			.catch((error) => console.error(error));
+	};
+
 	const fetchSystem = async () => {
 		db.collection("systems")
 			.doc(id)
@@ -28,7 +41,6 @@ const SystemInfo = () => {
 			.catch((e) => {
 				console.error(e);
 			});
-		console.log(system);
 	};
 
 	useEffect(() => {
@@ -37,13 +49,24 @@ const SystemInfo = () => {
 
 	return (
 		<>
-			<header>
-				<FaWindowClose
-					onClick={() => history.push("/")}
-					size={32}
-					className="close-button"
-				/>
-			</header>
+			<div className="d-flex justify-content-between">
+				<div>
+					<FaWindowClose
+						onClick={() => history.push("/")}
+						size={32}
+						className="close-button"
+					/>
+				</div>
+				{system.uid == currentUser.uid ? (
+					<div className="mx-2">
+						<StyledButton variant="danger" onClick={() => deleteSystem()}>
+							Delete System
+						</StyledButton>
+					</div>
+				) : (
+					""
+				)}
+			</div>
 
 			<Row className="g-1">
 				<h1 className="text-center system-title">{system.name}</h1>
@@ -54,7 +77,7 @@ const SystemInfo = () => {
 			}
 			<Row className="g-1 mx-auto stars">
 				<Row className="g-1">
-					<h3 className="text-center">Stars</h3>
+					<h3 className="text-center">Stars (3 max)</h3>
 				</Row>
 				{system.stars != [] ? (
 					<Row
@@ -76,7 +99,7 @@ const SystemInfo = () => {
 									/>
 								</Col>
 							))}
-						{currentUser.uid === system.uid ? (
+						{currentUser.uid === system.uid && system.stars.length < 4 ? (
 							<Col className="mx-auto d-flex justify-content-center align-items-center">
 								<AddCard
 									item="Star"
@@ -124,7 +147,7 @@ const SystemInfo = () => {
 								/>
 							</Col>
 						))}
-					{currentUser.uid === system.uid ? (
+					{currentUser.uid === system.uid && system.stars.length > 0 ? (
 						<Col className="mx-auto d-flex justify-content-center align-items-center">
 							<AddCard
 								item="Planet"

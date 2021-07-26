@@ -1,27 +1,34 @@
 import { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
-import { useAuth } from "../context/AuthContext";
-import { getSystems } from "../services/SystemRepository";
 import CustomNavbar from "./CustomNavbar";
 import SystemsGrid from "./system/SystemsGrid";
 import firestore from "firebase/firestore";
 import firebase from "firebase";
 
 const Home = () => {
-	const { logoutUser } = useAuth();
 	const [systems, setSystems] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const db = firebase.firestore();
 
-	useEffect(() => {
-		return fetchSystems();
+	useEffect(async () => {
+		setSystems(await fetchSystems());
 	}, []);
 
 	const fetchSystems = async () => {
+		var firestoreSystems = [];
 		const response = db.collection("systems");
-		const data = await response.get();
-		data.docs.forEach((doc) =>
-			setSystems([...systems, { id: doc.id, ...doc.data() }])
-		);
+		await response
+			.get()
+			.then((querySnapshot) => {
+				querySnapshot.docs.forEach((doc) => {
+					firestoreSystems.push({ id: doc.id, ...doc.data() });
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+
+		setIsLoading(false);
+		return firestoreSystems;
 	};
 
 	return (
@@ -31,12 +38,15 @@ const Home = () => {
 				<h1>Systems</h1>
 				<p>Browse these systems created by other users</p>
 			</div>
-			{/* <SystemsGrid systems={systems} /> */}
 
-			{systems !== [] ? (
-				<SystemsGrid systems={systems} />
+			{!isLoading ? (
+				systems !== [] ? (
+					<SystemsGrid systems={systems} />
+				) : (
+					<h2 className="text-center">No systems</h2>
+				)
 			) : (
-				<h2 className="text-center">No systems</h2>
+				<h4 className="text-center mt-5">Loading...</h4>
 			)}
 		</>
 	);
